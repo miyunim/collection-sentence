@@ -1,21 +1,47 @@
+var DeleteSentence = React.createClass({
+  handleClick: function(id) {
+    this.props.onDelete(id);
+  },
+  render: function() {
+    return (
+      <div className="col-xs-2">
+        <a className="pull-right text-danger h5"
+           onClick={this.handleClick.bind(this, this.props.data)}
+           key={this.props.data}
+           name="id">
+          <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        </a>
+      </div>
+    );
+  }
+});
+
 var Sentence = React.createClass({
   handleClick: function(id) {
     this.props.onDelete(id);
   },
   rawMarkup: function() {
-    var rawMarkup = marked(this.props.children.text.toString(), {sanitize: true});
-    return { __html: rawMarkup };
+    var _strList = this.props.children.text.split(" ");
+    var _strHrefList = "";
+    console.log(this);
+    $.each(_strList, function(index, str) {
+      _strHrefList += "<a target=\"_blank\" href=\"" + this.getURL(str) + "\">" + str + "</a> ";
+    }.bind(this));
+    return { __html: _strHrefList};
+  },
+  getURL: function(str) {
+    return "http://endic.naver.com/search.nhn?" +
+           "query=" + str + "&searchOption=entry_idiom";
   },
   render: function() {
     return (
       <div ref="myInput" className="sentence row">
-        <h5 className="pull-left" dangerouslySetInnerHTML={this.rawMarkup()} />
-        <a className="pull-right text-danger h5"
-                onClick={this.handleClick.bind(this, this.props.children.id)}
-                key={this.props.children.id}
-                name="id">
-          <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
-        </a>
+        <div className="col-xs-10">
+          <h5 dangerouslySetInnerHTML={this.rawMarkup()} />
+        </div>
+        <DeleteSentence data={this.props.children.id}
+                        onDelete={this.handleClick}>
+        </DeleteSentence>
       </div>
     );
   }
