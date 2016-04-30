@@ -20,10 +20,11 @@ var Sentence = React.createClass({
   handleClick: function(id) {
     this.props.onDelete(id);
   },
+  // NOTE: separation from sentence by blank
+  //       and connect Naver english dictionary
   rawMarkup: function() {
     var _strList = this.props.children.text.split(" ");
     var _strHrefList = "";
-    console.log(this);
     $.each(_strList, function(index, str) {
       _strHrefList += "<a target=\"_blank\" href=\"" + this.getURL(str) + "\">" + str + "</a> ";
     }.bind(this));
