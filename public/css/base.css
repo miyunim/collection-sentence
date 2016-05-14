@@ -38,3 +38,27 @@ p {
 .sentenceForm {
   margin: 30px 0;
 }
+
+h5 span {
+  cursor: pointer;
+}
+
+.modal-dialog {
+  width: 80%;
+}
+
+.modal-title {
+  margin: 15px 30px;
+}
+
+.modal-body {
+  background-color: #f5f5f5;
+}
+
+#examples-ul-content {
+  list-style-type: decimal;
+}
+
+#examples-ul-content li {
+  margin: 10px;
+}

@@ -16,6 +16,37 @@ var DeleteSentence = React.createClass({
   }
 });
 
+var Word = React.createClass({
+  handleClick: function(word) {
+    // show sentence examples by current word.
+    var limit_char = /[~!\#$^&*\=+|:;?"<,.>']/;
+    var _word = word.replace(limit_char, "").toLowerCase();
+
+    $.get( "http://sentence.yourdictionary.com/" + _word, function( data ) {
+      var frag = document.createDocumentFragment("div");
+      $(frag).append(data);
+      var examples = $(frag).find("#examples-ul-content");
+      $("#myModalLabel").html(_word + " (" + examples.find('li').length + ") ");
+      $("#sentence-list").append(examples);
+      $('#myModal').modal("show");
+
+      frag = null;
+    });
+  },
+  render: function() {
+    var spans = [];
+    var _words = this.props.data.text.split(' ');
+    for (var i = 0; i < _words.length; i++) {
+      spans.push(<span key={i}
+                       onClick={this.handleClick.bind(this, _words[i])}>
+                 {_words[i]} </span>);
+    }
+    return (
+      <h5>{spans}</h5>
+    );
+  }
+});
+
 var Sentence = React.createClass({
   handleClick: function(id) {
     this.props.onDelete(id);
@@ -38,7 +69,7 @@ var Sentence = React.createClass({
     return (
       <div ref="myInput" className="sentence row">
         <div className="col-xs-10">
-          <h5 dangerouslySetInnerHTML={this.rawMarkup()} />
+          <Word data={this.props.children} />
         </div>
         <DeleteSentence data={this.props.children.id}
                         onDelete={this.handleClick}>
